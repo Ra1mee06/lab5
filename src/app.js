@@ -1,19 +1,17 @@
-import express from 'express';
-
-import userRouter from './resources/users/user.router.js';
+const express = require('express');
 
 const app = express();
-
 app.use(express.json());
 
-app.use('/', (req, res, next) => {
-  if (req.originalUrl === '/') {
-    res.send('Service is running!');
-    return;
-  }
-  next();
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Express REST service (интернет-магазин)',
+    endpoints: ['/client', '/order', '/products'],
+  });
 });
 
-app.use('/users', userRouter);
+app.use('/client', require('./resources/client/client.router'));
+app.use('/order', require('./resources/order/order.router'));
+app.use('/products', require('./resources/product/product.router'));
 
-export default app;
+module.exports = app;
